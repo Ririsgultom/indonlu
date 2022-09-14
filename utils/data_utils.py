@@ -509,8 +509,8 @@ class DocumentSentimentDataset(Dataset):
     
     def load_dataset(self, path): 
         df = pd.read_csv(path, sep='\t', header=None)
-        df.columns = ['text','sentiment']
-        df['sentiment'] = df['sentiment'].apply(lambda lab: self.LABEL2INDEX[lab])
+        df.columns = ['isi','label']
+        df['label'] = df['label'].apply(lambda lab: self.LABEL2INDEX[lab])
         return df
     
     def __init__(self, dataset_path, tokenizer, no_special_token=False, *args, **kwargs):
@@ -520,9 +520,9 @@ class DocumentSentimentDataset(Dataset):
     
     def __getitem__(self, index):
         data = self.data.loc[index,:]
-        text, sentiment = data['text'], data['sentiment']
+        text, sentiment = data['isi'], data['label']
         subwords = self.tokenizer.encode(text, add_special_tokens=not self.no_special_token)
-        return np.array(subwords), np.array(sentiment), data['text']
+        return np.array(subwords), np.array(sentiment), data['isi']
     
     def __len__(self):
         return len(self.data)    
