@@ -831,13 +831,13 @@ class AspectBasedSentimentAnalysisDataLoader(DataLoader):
 #####
 class NewsCategorizationDataset(Dataset):
     # Static constant variable
-    LABEL2INDEX = {'permasalahan pada bank besar domestik': 0, 'pertumbuhan ekonomi domestik yang terbatas': 1, 'volatilitas harga komoditas utama dunia': 2, 'frekuensi kenaikan fed fund rate (ffr) yang melebihi ekspektasi': 3, 'perubahan kebijakan dan/atau regulasi pada institusi keuangan': 4, 'isu politik domestik': 5, 'permasalahan pada bank besar international': 6, 'perubahan kebijakan pemerintah yang berkaitan dengan fiskal': 7, 'pertumbuhan ekonomi global yang terbatas': 8, 'kebijakan pemerintah yang bersifat sektoral': 9, 'isu politik dan ekonomi luar negeri': 10, 'kenaikan harga volatile food': 11, 'tidak berisiko': 12, 'pergerakan harga minyak mentah dunia': 13, 'force majeure yang memengaruhi operasional sistem keuangan': 14, 'kenaikan administered price': 15}
-    INDEX2LABEL = {0: 'permasalahan pada bank besar domestik', 1: 'pertumbuhan ekonomi domestik yang terbatas', 2: 'volatilitas harga komoditas utama dunia', 3: 'frekuensi kenaikan fed fund rate (ffr) yang melebihi ekspektasi', 4: 'perubahan kebijakan dan/atau regulasi pada institusi keuangan', 5: 'isu politik domestik', 6: 'permasalahan pada bank besar international', 7: 'perubahan kebijakan pemerintah yang berkaitan dengan fiskal', 8: 'pertumbuhan ekonomi global yang terbatas', 9: 'kebijakan pemerintah yang bersifat sektoral', 10: 'isu politik dan ekonomi luar negeri', 11: 'kenaikan harga volatile food', 12: 'tidak berisiko', 13: 'pergerakan harga minyak mentah dunia', 14: 'force majeure yang memengaruhi operasional sistem keuangan', 15: 'kenaikan administered price'}
-    NUM_LABELS = 16
+    LABEL2INDEX = {'Hoax': 0, 'Fakta': 1}
+    INDEX2LABEL = {0: 'Hoax', 1: 'Fakta'}
+    NUM_LABELS = 2
     
     def load_dataset(self, path):
         dataset = pd.read_csv(path, sep='\t', header=None)
-        dataset.columns = ['text', 'label']
+        dataset.columns = ['isi', 'label']
         dataset['label'] = dataset['label'].apply(lambda labels: [self.LABEL2INDEX[label] for label in labels.split(',')])
         return dataset
     
@@ -848,9 +848,9 @@ class NewsCategorizationDataset(Dataset):
     
     def __getitem__(self, index):
         data = self.data.loc[index,:]
-        text, labels = data['text'], data['label']
+        text, labels = data['isi'], data['label']
         subwords = self.tokenizer.encode(text, add_special_tokens=not self.no_special_token)
-        return np.array(subwords), np.array(labels), data['text']
+        return np.array(subwords), np.array(labels), data['isi']
     
     def __len__(self):
         return len(self.data)    
