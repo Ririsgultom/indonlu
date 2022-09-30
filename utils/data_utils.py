@@ -831,8 +831,8 @@ class AspectBasedSentimentAnalysisDataLoader(DataLoader):
 #####
 class NewsCategorizationDataset(Dataset):
     # Static constant variable
-    LABEL2INDEX = {'Hoax': 0, 'Fakta': 1}
-    INDEX2LABEL = {0: 'Hoax', 1: 'Fakta'}
+    LABEL2INDEX = {'hoax': 0, 'fakta': 1}
+    INDEX2LABEL = {0: 'hoax', 1: 'fakta'}
     NUM_LABELS = 2
     
     def load_dataset(self, path):
